@@ -1,0 +1,67 @@
+/**
+ * Sample business network definition.
+ */
+namespace com.ibm.sample.mortgage
+
+enum AccountType {
+  o Checking
+  o Savings
+  o CreditCard
+  o Mortgage
+}
+
+concept BankInfo {  // Concepts not working right now in playground
+  o String mame
+  o Integer routingNumber
+  o Integer accountNumber
+  o AccountType accountType
+  o Double balance
+}
+
+asset Bank2Info identified by bankID { 	// Ugly but may have to create this separate and reference it ... oi!!
+  o String bankID
+  o String mame
+  o Integer routingNumber
+  o Integer accountNumber
+  o AccountType accountType
+  o Double balance
+}
+
+concept AddressInfo {   // Concepts not working right now in playground
+  o String streetAddr
+  o String city
+  o String state
+  o String zipcode
+}
+
+abstract participant User identified by userID {
+  o String userID
+  o String firstName
+  o String lastName
+}
+
+participant Client extends User {
+  o Integer ssn
+  o String streetAddr
+  o String city
+  o String state
+  o String zipcode
+  // o AddressInfo address
+}
+
+participant CreditAgency extends User {
+  o String companyName
+}
+
+asset MortgageApplication identified by applicationID {
+  o String applicationID
+  --> Client client
+  o Bank2Info [] bankInfo
+  o Integer  creditScore
+}
+
+transaction ReportCredit identified by creditID {
+  o String creditID
+  --> MortgageApplication  mortgageApp
+  o Integer creditScore
+}
